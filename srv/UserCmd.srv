@@ -1,5 +1,5 @@
 int16 request_id
 ---
 int16 state_id
-string response_msg
+int16 msg_id
 time rec_time
