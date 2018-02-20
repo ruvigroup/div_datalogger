@@ -1,0 +1,5 @@
+int16 request_id
+---
+int16 state_id
+string response_msg
+time rec_time
