@@ -66,8 +66,14 @@ class Datalogger:
 			if self.__state_id == self.__STATE_ID_IDLE:
 				# Prepare log message
 				rospy.loginfo(rospy.get_caller_id() + ': Start recording bag file...')
+				# Find USB storage device as first directory in /media/ubuntu/
+				if len(os.listdir('/media/ubuntu/')) > 0:
+					path_usb_drive = ('/media/ubuntu/' + os.listdir('/media/ubuntu/')[0])
+				else:
+					path_usb_drive = '/home/ubuntu/bagfiles'
+
 				# Open sub process for bagrecord (LZ4 compressed)
-				self.__proc_rec = subprocess.Popen(['rosbag', 'record', '--lz4', '/flagbutton_pressed', '/imu/data', '/scan', '/fix'], preexec_fn=os.setsid, cwd='/home/ubuntu/bagfiles')
+				self.__proc_rec = subprocess.Popen(['rosbag', 'record', '--lz4', '/flagbutton_pressed', '/imu/data', '/scan', '/fix'], preexec_fn=os.setsid, cwd=path_usb_drive)
 				# Save log start time
 				self.__rec_time_start = rospy.Time.now()
 				# Return save log start time

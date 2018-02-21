@@ -2,8 +2,8 @@
 
   <!-- Enable/disable other nodes -->
   <arg name="websocket" value="1"/>
-  <arg name="lidar" value="0"/>
-  <arg name="imu" value="0"/>
+  <arg name="lidar" value="1"/>
+  <arg name="imu" value="1"/>
   <arg name="gps" value="1"/>
   <arg name="flagbutton" value="1"/>
 
@@ -21,7 +21,7 @@
     <include file="$(find div_datalogger)/launch/nmea_navsat.launch"></include>
   </group>
   <group if="$(arg flagbutton)">
-    <node pkg="div_datalogger" type="flagbutton.py" name="flagbutton"></node>
+    <node pkg="div_datalogger" type="flagbutton.py" name="flagbutton" respawn="true"></node>
   </group>
   
   <!-- Launch file for data logger -->
