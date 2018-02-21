@@ -3,14 +3,13 @@
 # State machine:
 #  IDLE
 #  LOGGING
-#  STREAMING
-#  (PAUSE?)
-#
-# Sub states:
-#  -
+#  SHUTDOWN
 #
 # Input topics:
-#  /scan - laser scan topic
+#  /scan 		- laser scan topic
+#  /imu/data 		- laser scan topic
+#  /fix 		- GPS topic
+#  /flagbutton_pressed 	- flag button is pressed topic
 #
 # Parameters:
 # -
@@ -20,7 +19,6 @@ import rospy
 import os
 import subprocess
 import signal
-# import roslaunch	
 
 # Import messages
 from sensor_msgs.msg import *
@@ -69,7 +67,7 @@ class Datalogger:
 				# Prepare log message
 				rospy.loginfo(rospy.get_caller_id() + ': Start recording bag file...')
 				# Open sub process for bagrecord (LZ4 compressed)
-				self.__proc_rec = subprocess.Popen(['rosbag', 'record', '--lz4', '/imu/data'], preexec_fn=os.setsid, cwd='/home/ubuntu/bagfiles')
+				self.__proc_rec = subprocess.Popen(['rosbag', 'record', '--lz4', '/flagbutton_pressed', '/imu/data', '/scan', '/fix'], preexec_fn=os.setsid, cwd='/home/ubuntu/bagfiles')
 				# Save log start time
 				self.__rec_time_start = rospy.Time.now()
 				# Return save log start time
@@ -80,10 +78,10 @@ class Datalogger:
 					self.__state_id = self.__STATE_ID_REC
 					msg_id = 0		
 				else:
-					rospy.loginfo(rospy.get_caller_id() + ': No valid request ID.')
+					rospy.loginfo(rospy.get_caller_id() + ': Recording subprocess not started')
 					msg_id = -1
 			else:
-				rospy.loginfo(rospy.get_caller_id() + ': No valid request ID.')
+				rospy.loginfo(rospy.get_caller_id() + ': Invalid request, already recording')
 				msg_id = -1
 				rec_time = rospy.Time(secs = 0, nsecs = 0)
 
@@ -99,32 +97,28 @@ class Datalogger:
 				# Check if process call was successful
 				rospy.sleep(.5)
 				if self.__proc_rec.poll() == None:
-					rospy.loginfo(rospy.get_caller_id() + ': No valid request ID.')
+					rospy.loginfo(rospy.get_caller_id() + ': Recording subprocess not stopped')
 					msg_id = -1
 				else:
 					# Change state
 					self.__state_id = self.__STATE_ID_IDLE
 					msg_id = 0
 			else:
-				rospy.loginfo(rospy.get_caller_id() + ': No valid request ID.')
+				rospy.loginfo(rospy.get_caller_id() + ': Invalid request, not recording')
 				msg_id = -1
 				rec_time = rospy.Time(secs = 0, nsecs = 0)
 
 		elif request.request_id == self.__REQ_ID_SYS_SHTDN:
-			#if self.__state_id == self.__STATE_ID_IDLE:
-				# Change state
+			# Change state
 			self.__state_id = self.__STATE_ID_SHTDN
 			rospy.loginfo(rospy.get_caller_id() + ': Shutting down system...')
 			subprocess.Popen(['shutdown', 'now'])
 			msg_id = 0
-			#else:
-			#	rospy.loginfo(rospy.get_caller_id() + ': No valid request ID.')
-			#	msg_id = -1
 			rec_time = rospy.Time(secs = 0, nsecs = 0)
 
 		else:
 			# Case when invalid request id is used
-			rospy.loginfo(rospy.get_caller_id() + ': No valid request ID.')
+			rospy.loginfo(rospy.get_caller_id() + ': No valid request')
 			msg_id = -1
 			rec_time = rospy.Time(secs = 0, nsecs = 0)
 

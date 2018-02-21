@@ -1,30 +1,30 @@
 <launch>
+
   <!-- Enable/disable other nodes -->
   <arg name="websocket" value="1"/>
   <arg name="lidar" value="0"/>
-  <arg name="imu" value="1"/>
-  <arg name="gps" value="0"/>
+  <arg name="imu" value="0"/>
+  <arg name="gps" value="1"/>
+  <arg name="flagbutton" value="1"/>
 
   <!-- Launch other nodes -->
   <group if="$(arg websocket)">
-    <include file="$(find div_datalogger)/launch/rosbridge_websocket.launch">
-    </include>
+    <include file="$(find div_datalogger)/launch/rosbridge_websocket.launch"></include>
   </group>
   <group if="$(arg lidar)">
-    <include file="$(find div_datalogger)/launch/lidar.launch">
-    </include>
+    <include file="$(find div_datalogger)/launch/lidar.launch"></include>
   </group>
   <group if="$(arg imu)">
-    <include file="$(find div_datalogger)/launch/imu.launch">
-    </include>
+    <include file="$(find div_datalogger)/launch/imu.launch"></include>
   </group>
   <group if="$(arg gps)">
-    <include file="$(find div_datalogger)/launch/nmea_navsat.launch">
-    </include>
+    <include file="$(find div_datalogger)/launch/nmea_navsat.launch"></include>
   </group>
-
+  <group if="$(arg flagbutton)">
+    <node pkg="div_datalogger" type="flagbutton.py" name="flagbutton"></node>
+  </group>
+  
   <!-- Launch file for data logger -->
-  <node pkg="div_datalogger" type="datalogger.py" name="datalogger" output="screen">
-  </node>
+  <node pkg="div_datalogger" type="datalogger.py" name="datalogger" output="screen" respawn="true"></node>
 
 </launch>
