@@ -5,14 +5,16 @@
 #  LOGGING
 #  SHUTDOWN
 #
-# Input topics:
-#  /scan 		- laser scan topic
-#  /imu/data 		- laser scan topic
-#  /fix 		- GPS topic
-#  /flagbutton_pressed 	- flag button is pressed topic
-#
-# Parameters:
-# -
+# Recorded topics:
+#  /scan 				- laser scan topic
+#  /imu/data 				- laser scan topic
+#  /time_reference			- GPS ref time
+#  /vel					- GPS speed
+#  /fix 				- GPS position
+#  /flagbutton_pressed 			- flag button is pressed topic
+#  /cv_camera/image_raw/compressed 	- image raw data (compressed)
+#  /rosout				- ros log output
+
 
 import roslib #; manifest?
 import rospy
@@ -73,7 +75,7 @@ class Datalogger:
 					path_usb_drive = '/home/ubuntu/bagfiles'
 
 				# Open sub process for bagrecord (LZ4 compressed)
-				self.__proc_rec = subprocess.Popen(['rosbag', 'record', '--lz4', '/flagbutton_pressed', '/imu/data', '/scan', '/fix'], preexec_fn=os.setsid, cwd=path_usb_drive)
+				self.__proc_rec = subprocess.Popen(['rosbag', 'record', '--lz4', '--split', '--size=1024', '/flagbutton_pressed', '/tf', '/imu/data', '/imu/data_raw', '/imu/mag', '/scan', '/time_reference', '/fix', '/vel', '/cv_camera/image_raw/compressed', '/rosout'], preexec_fn=os.setsid, cwd=path_usb_drive)
 				# Save log start time
 				self.__rec_time_start = rospy.Time.now()
 				# Return save log start time
@@ -84,10 +86,10 @@ class Datalogger:
 					self.__state_id = self.__STATE_ID_REC
 					msg_id = 0		
 				else:
-					rospy.loginfo(rospy.get_caller_id() + ': Recording subprocess not started')
+					rospy.logerr(rospy.get_caller_id() + ': Recording subprocess not started')
 					msg_id = -1
 			else:
-				rospy.loginfo(rospy.get_caller_id() + ': Invalid request, already recording')
+				rospy.logwarn(rospy.get_caller_id() + ': Invalid request, already recording')
 				msg_id = -1
 				rec_time = rospy.Time(secs = 0, nsecs = 0)
 
@@ -101,16 +103,16 @@ class Datalogger:
 				self.__proc_rec.send_signal(subprocess.signal.SIGINT)
 				os.killpg(self.__proc_rec.pid, signal.SIGINT)
 				# Check if process call was successful
-				rospy.sleep(.5)
+				rospy.sleep(5) # leave enough time to be sure that the process is killed
 				if self.__proc_rec.poll() == None:
-					rospy.loginfo(rospy.get_caller_id() + ': Recording subprocess not stopped')
+					rospy.logerr(rospy.get_caller_id() + ': Recording subprocess not stopped')
 					msg_id = -1
 				else:
 					# Change state
 					self.__state_id = self.__STATE_ID_IDLE
 					msg_id = 0
 			else:
-				rospy.loginfo(rospy.get_caller_id() + ': Invalid request, not recording')
+				rospy.logwarn(rospy.get_caller_id() + ': Invalid request, not recording')
 				msg_id = -1
 				rec_time = rospy.Time(secs = 0, nsecs = 0)
 

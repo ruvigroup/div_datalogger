@@ -56,6 +56,8 @@
   <build_depend>urg_node</build_depend>
   <build_depend>phidgets_drivers</build_depend>
   <build_depend>nmea_navsat_driver</build_depend>
+  <build_depend>usb_cam</build_depend>
+  <build_depend>cv_camera</build_depend>
   <build_depend>message_generation</build_depend>
 
   <build_export_depend>roscpp</build_export_depend>
@@ -64,6 +66,8 @@
   <build_export_depend>nmea_msgs</build_export_depend>
   <build_export_depend>urg_node</build_export_depend>
   <build_export_depend>phidgets_drivers</build_export_depend>
+  <build_export_depend>usb_cam</build_export_depend>
+  <build_export_depend>cv_camera</build_export_depend>
   <build_export_depend>nmea_navsat_driver</build_export_depend>
 
   <exec_depend>roscpp</exec_depend>
@@ -73,6 +77,8 @@
   <exec_depend>urg_node</exec_depend>
   <exec_depend>phidgets_drivers</exec_depend>
   <exec_depend>nmea_navsat_driver</exec_depend>
+  <exec_depend>usb_cam</exec_depend>
+  <exec_depend>cv_camera</exec_depend>
   <exec_depend>message_runtime</exec_depend>
 
 

@@ -5,6 +5,7 @@
   <arg name="lidar" value="1"/>
   <arg name="imu" value="1"/>
   <arg name="gps" value="1"/>
+  <arg name="camera" value="1"/>
   <arg name="flagbutton" value="1"/>
 
   <!-- Launch other nodes -->
@@ -19,6 +20,9 @@
   </group>
   <group if="$(arg gps)">
     <include file="$(find div_datalogger)/launch/nmea_navsat.launch"></include>
+  </group>
+  <group if="$(arg camera)">
+    <include file="$(find div_datalogger)/launch/cv_camera.launch"></include>
   </group>
   <group if="$(arg flagbutton)">
     <node pkg="div_datalogger" type="flagbutton.py" name="flagbutton" respawn="true"></node>
