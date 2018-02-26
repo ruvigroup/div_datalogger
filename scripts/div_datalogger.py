@@ -31,7 +31,7 @@ from div_datalogger.srv import *
 
 class Datalogger:
 	def __init__(self):
-		rospy.init_node("datalogger")
+		rospy.init_node("div_datalogger")
 		
 		# State ID's
 		self.__STATE_ID_IDLE		= 0

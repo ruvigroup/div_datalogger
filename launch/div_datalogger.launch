@@ -29,6 +29,6 @@
   </group>
   
   <!-- Launch file for data logger -->
-  <node pkg="div_datalogger" type="datalogger.py" name="datalogger" output="screen" respawn="true"></node>
+  <node pkg="div_datalogger" type="$div_datalogger.py" name="div_datalogger" output="screen" respawn="true"></node>
 
 </launch>
