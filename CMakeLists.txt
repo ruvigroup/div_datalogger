@@ -160,8 +160,8 @@ include_directories(
 ## Mark executable scripts (Python etc.) for installation
 ## in contrast to setup.py, you can choose the destination
 install(PROGRAMS
-  scripts/div_datalogger.py
-  scripts/flagbutton.py
+  scripts/div_datalogger_node.py
+  scripts/flagbutton_node.py
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
 
