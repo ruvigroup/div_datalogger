@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 #
+# Node publishing if push button is pressed or not (Bool)
 
-
-import roslib #; manifest?
+import roslib
 import rospy
 import wiringpi
 

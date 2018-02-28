@@ -1,22 +1,28 @@
 #!/usr/bin/env python
 #
+# Node subscribing to sensor topics and handling user request via service
+#
 # State machine:
 #  IDLE
 #  LOGGING
 #  SHUTDOWN
 #
-# Recorded topics:
-#  /scan 				- laser scan topic
-#  /imu/data 				- laser scan topic
-#  /time_reference			- GPS ref time
-#  /vel					- GPS speed
-#  /fix 				- GPS position
-#  /flagbutton_pressed 			- flag button is pressed topic
-#  /cv_camera/image_raw/compressed 	- image raw data (compressed)
-#  /rosout				- ros log output
+# Subscribed topics:
+#  /scan 							: laser scan topic
+#  /imu/data 						: laser scan topic
+#  /time_reference					: GPS ref time
+#  /vel								: GPS speed
+#  /fix 							: GPS position
+#  /flagbutton_pressed 				: flag button is pressed topic
+#  /cv_camera/image_raw/compressed 	: image raw data (compressed)
+#  /rosout							: ros log output
+#
+# Service:
+#  /user_cmd
+# 	-> Request:		ID
+#	-> Response:	State ID, Message ID, Recording time 
 
-
-import roslib #; manifest?
+import roslib
 import rospy
 import os
 import subprocess
@@ -35,7 +41,7 @@ class Datalogger:
 		
 		# State ID's
 		self.__STATE_ID_IDLE		= 0
-		self.__STATE_ID_REC		= 1
+		self.__STATE_ID_REC			= 1
 		self.__STATE_ID_SHTDN		= 10
 
 		# Request ID's
@@ -48,10 +54,11 @@ class Datalogger:
 		self.__RESP_MSG_ID_SUCCESS 	= 0
 		self.__RESP_MSG_ID_FAILED 	= -1
 
-		# Sleep time to wait for subprocess response [sec]
+		# Sleep times for waiting for subprocess response [sec]
 		self.__PROC_RESP_SLEEPTIME	= 1
+		self.__PROC_KILL_SLEEPTIME	= 5
 
-		# Variables
+		# Variable initialization
 		self.__rec_time_start	= rospy.Time(secs = 0, nsecs = 0)
 		self.__state_id		= self.__STATE_ID_IDLE
 		self.__proc_rec 	= []
@@ -75,7 +82,7 @@ class Datalogger:
 					path_usb_drive = '/home/ubuntu/bagfiles'
 
 				# Open sub process for bagrecord (LZ4 compressed)
-				self.__proc_rec = subprocess.Popen(['rosbag', 'record', '--lz4', '--split', '--size=1024', '/flagbutton_pressed', '/tf', '/imu/data', '/imu/data_raw', '/imu/mag', '/scan', '/time_reference', '/fix', '/vel', '/cv_camera/image_raw/compressed', '/rosout'], preexec_fn=os.setsid, cwd=path_usb_drive)
+				self.__proc_rec = subprocess.Popen(['rosbag', 'record', '--split', '--size=1024', '/flagbutton_pressed', '/tf', '/imu/data', '/imu/data_raw', '/imu/mag', '/scan', '/time_reference', '/fix', '/vel', '/cv_camera/image_raw/compressed', '/rosout'], preexec_fn=os.setsid, cwd=path_usb_drive)
 				# Save log start time
 				self.__rec_time_start = rospy.Time.now()
 				# Return save log start time
@@ -103,7 +110,7 @@ class Datalogger:
 				self.__proc_rec.send_signal(subprocess.signal.SIGINT)
 				os.killpg(self.__proc_rec.pid, signal.SIGINT)
 				# Check if process call was successful
-				rospy.sleep(5) # leave enough time to be sure that the process is killed
+				rospy.sleep(self.__PROC_KILL_SLEEPTIME) # leave enough time to be sure that the process is killed
 				if self.__proc_rec.poll() == None:
 					rospy.logerr(rospy.get_caller_id() + ': Recording subprocess not stopped')
 					msg_id = -1
