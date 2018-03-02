@@ -127,7 +127,7 @@ class Datalogger:
 			# Change state
 			self.__state_id = self.__STATE_ID_SHTDN
 			rospy.loginfo(rospy.get_caller_id() + ': Shutting down system...')
-			os.system('shutdown now')
+			os.system('sudo shutdown now')
 			msg_id = 0
 			rec_time = rospy.Time(secs = 0, nsecs = 0)
 

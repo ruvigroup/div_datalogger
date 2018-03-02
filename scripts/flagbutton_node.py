@@ -21,10 +21,12 @@ class Flagbutton:
 
 		# WiringPi setup
 		wiringpi.wiringPiSetupGpio()
+		rospy.loginfo(rospy.get_caller_id() + ': Wiring Pi GPIO initialized')
 		
 		# Define input on GPIO pin using pull up
 		wiringpi.pinMode(self.__GPIO_NO_BTN, wiringpi.GPIO.INPUT)
 		wiringpi.pullUpDnControl(self.__GPIO_NO_BTN, wiringpi.GPIO.PUD_UP)
+		rospy.loginfo(rospy.get_caller_id() + ': Wiring Pi button pin set up')
 
 	def main(self):
 		# Loop at 10 Hz and publish message
