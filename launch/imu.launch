@@ -1,5 +1,4 @@
 <!-- Phidgets IMU launch file -->
-
 <launch>
 
   <!-- Nodelet manager -->

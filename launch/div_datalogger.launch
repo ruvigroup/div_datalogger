@@ -25,7 +25,7 @@
     <include file="$(find div_datalogger)/launch/cv_camera.launch"></include>
   </group>
   <group if="$(arg flagbutton)">
-    <node pkg="div_datalogger" type="flagbutton_node.py" name="flagbutton" respawn="true"></node>
+    <node pkg="div_datalogger" type="flagbutton_node.py" name="flagbutton" respawn="true" output="screen"></node>
   </group>
   
   <!-- Launch file for data logger -->

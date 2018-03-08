@@ -5,7 +5,7 @@
     <param name="image_width" value="640"/>
     <param name="image_height" value="480"/>
     <param name="rate" value="30"/>
-    <param name="frame_id" value="cv_cam"/>
+    <param name="frame_id" value="camera"/>
   </node>
 
 </launch>

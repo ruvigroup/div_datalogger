@@ -1,5 +1,4 @@
 <launch>
-
   <node name="urg_node" pkg="urg_node" type="urg_node" output="screen" respawn="true">
     <param name="ip_address" value="192.168.0.10"/>
     <param name="serial_port" value="/dev/ttyACM0"/>
@@ -11,5 +10,4 @@
     <param name="angle_min" value="-1.6580628"/>
     <param name="angle_max" value="1.6580628"/>
   </node>
-
 </launch>
