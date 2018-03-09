@@ -82,7 +82,7 @@ class Datalogger:
 					path_usb_drive = '/home/ubuntu/bagfiles'
 
 				# Open sub process for bagrecord
-				self.__proc_rec = subprocess.Popen(['rosbag', 'record', '--split', '--size=1024', '/flagbutton_pressed', '/tf', '/imu/data', '/imu/data_raw', '/imu/mag', '/scan', '/time_reference', '/fix', '/vel', '/cv_camera/image_raw/compressed', '/rosout'], preexec_fn=os.setsid, cwd=path_usb_drive)
+				self.__proc_rec = subprocess.Popen(['rosbag', 'record', '--split', '--size=1024', '/flagbutton_pressed', '/tf', '/imu/data_raw', '/imu/mag', '/scan', '/time_reference', '/fix', '/vel', '/cv_camera/image_raw/compressed', '/cv_camera/camera_info', '/rosout'], preexec_fn=os.setsid, cwd=path_usb_drive)
 				# Save log start time
 				self.__rec_time_start = rospy.Time.now()
 				# Return save log start time
