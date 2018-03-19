@@ -6,13 +6,13 @@ The data logger is running entirely on a Raspberry Pi (RPi), version 3 B, to whi
 ## Hardware
 ### Sensors
 Here is an overview of the sensors connected to the RPi:
-| Sensor    	  | Product 						        | Connection type | Sampling rate |
-|---------------|-----------------------------|-----------------|---------------|
-| LiDAR			    | Hokuyo UXM-30LAH-EWA			  | Ethernet		    |	20 Hz		      |
-| IMU			      | PhidgetSpatial 1044_0 		  | USB 			      | 250 Hz		    |
-| GPS			      | Globalsat BU-353S4			    | USB		  	      |	1 Hz		      |
-| Camera		    | Creative Live! Cam Sync HD	| USB		  	      |	15 fps		    |
-| Flag button	  | -								            | GPIO		  	    |	10 Hz		      |
+| Sensor    	| Product 						| Connection type | Sampling rate |
+|---------------|-------------------------------|-----------------|---------------|
+| LiDAR			| Hokuyo UXM-30LAH-EWA			| Ethernet		  |	20 Hz		  |
+| IMU			| PhidgetSpatial 1044_0 		| USB 			  | 250 Hz		  |
+| GPS			| Globalsat BU-353S4			| USB		  	  |	1 Hz		  |
+| Camera		| Creative Live! Cam Sync HD	| USB		  	  |	15 fps		  |
+| Flag button	| -								| GPIO		  	  |	10 Hz		  |
 
 > **Note:** The frame rate of the camera was set to 30 fps but due to the processing load on the RPi, the resulting frame rate decreased to 15.
 
