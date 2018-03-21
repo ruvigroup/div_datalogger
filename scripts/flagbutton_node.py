@@ -1,18 +1,18 @@
 #!/usr/bin/env python
 #
-# Node publishing if push button is pressed or not (Bool)
+# Node publishing if push button is pressed or not (BooleanStamped)
 
 import roslib
 import rospy
 import wiringpi
 
 # Import messages
-from std_msgs.msg import Bool
+from div_datalogger.msg import BooleanStamped
 
 class Flagbutton:
 	def __init__(self):
 		# Create publisher
-		self.__pub = rospy.Publisher('flagbutton_pressed', Bool, queue_size = 100)
+		self.__pub = rospy.Publisher('flagbutton_pressed', BooleanStamped, queue_size = 100)
 
 		rospy.init_node('flagbutton')
 		
@@ -33,7 +33,10 @@ class Flagbutton:
 		rate = rospy.Rate(10)
 		while not rospy.is_shutdown():
 			# Publish True (button pressed) or False 
-			self.__pub.publish(wiringpi.digitalRead(self.__GPIO_NO_BTN) == 0)
+			msg = BooleanStamped()
+			msg.data = wiringpi.digitalRead(self.__GPIO_NO_BTN) == 0
+			msg.header.time = rospy.get_rostime()
+			self.__pub.publish(msg)
 			rate.sleep()
 	
 
