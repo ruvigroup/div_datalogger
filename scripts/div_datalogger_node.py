@@ -60,9 +60,10 @@ class Datalogger:
 
 		# Variable initialization
 		self.__rec_time_start	= rospy.Time(secs = 0, nsecs = 0)
-		self.__state_id		= self.__STATE_ID_IDLE
-		self.__proc_rec 	= []
+		self.__state_id			= self.__STATE_ID_IDLE
+		self.__proc_rec 		= []
 
+	
 
 	def __handle_user_cmd(self, request):
 		if request.request_id == self.__REQ_ID_STATUS:
@@ -122,6 +123,7 @@ class Datalogger:
 				rospy.logwarn(rospy.get_caller_id() + ': Invalid request, not recording')
 				msg_id = -1
 				rec_time = rospy.Time(secs = 0, nsecs = 0)
+			
 
 		elif request.request_id == self.__REQ_ID_SYS_SHTDN:
 			# Change state
