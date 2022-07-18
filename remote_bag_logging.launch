@@ -1,0 +1,9 @@
+<launch>
+  <!-- Launch file for data logger -->
+  <node pkg="remote_bag_logging" type="main.py" name="remote_bag_logging" output="screen" respawn="true">
+    <rosparam param="topic_list">["/rosout", "/record_state"]</rosparam>
+    <param name="int_rec_path" value="/home/tim/bagfile_intern"/>
+    <param name="ext_rec_path" value="/media/tim/Volume/bagfiles"/>
+  </node>
+
+</launch>
